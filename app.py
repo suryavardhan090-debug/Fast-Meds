@@ -3,8 +3,15 @@ from datetime import datetime
 from utils import (
     load_csv, search_medicine, add_distance,
     sort_by_distance, emergency_filter, make_message,
-    load_recent, save_recent
 )
+
+def save_recent(query):
+    if not query:
+        return
+    recent = st.session_state.get("recent_queries", [])
+    recent = [q for q in recent if q.lower() != query.lower()]
+    recent.insert(0, query)
+    st.session_state["recent_queries"] = recent[:5]
 
 # ---- Page setup ----
 st.set_page_config(page_title="Emergency Medicine Finder", page_icon="💊", layout="centered")
@@ -116,7 +123,7 @@ if st.sidebar.button("🗑 Clear search"):
         st.rerun()
 
 # ---- Main search box ----
-recent_queries = load_recent()
+recent_queries = st.session_state.get("recent_queries", [])
 if recent_queries:
     st.caption("🕒 Recent searches:")
     cols = st.columns(len(recent_queries))
