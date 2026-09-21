@@ -5,6 +5,10 @@ from utils import (
     sort_by_distance, emergency_filter, make_message,
 )
 
+def clear_search():
+    st.session_state["medicine_query"] = ""
+    st.session_state["recent_queries"] = []
+
 def save_recent(query):
     if not query:
         return
@@ -117,10 +121,7 @@ emergency_mode = st.sidebar.toggle("🚨 Emergency mode (open now + in stock onl
 if emergency_mode:
     st.markdown('<div class="emergency-banner">🚨 Emergency mode — showing only pharmacies open now with stock available.</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
-if st.sidebar.button("🗑 Clear search"):
-    st.session_state["medicine_query"] = ""
-    if st.button("🔍 Find"):
-        st.rerun()
+
 
 # ---- Main search box ----
 recent_queries = st.session_state.get("recent_queries", [])
@@ -128,22 +129,33 @@ if recent_queries:
     st.caption("🕒 Recent searches:")
     cols = st.columns(len(recent_queries))
     for i, q in enumerate(recent_queries):
-        if cols[i].button(q, key=f"recent_{i}"):
-            st.session_state["medicine_query"] = q
-            st.rerun()
+     if cols[i].button(q, key=f"recent_{i}"):
+         st.session_state["medicine_query"] = q
+         st.session_state["trigger_search"] = True
+         st.rerun()
 COMMON_MEDS = ["Paracetamol", "Ibuprofen", "Salbutamol", "Amoxicillin", "Cetirizine"]
 if not recent_queries:
     st.caption("💊 Commonly searched:")
     cols = st.columns(len(COMMON_MEDS))
     for i, med in enumerate(COMMON_MEDS):
         if cols[i].button(med, key=f"common_{i}"):
-            st.session_state["medicine_query"] = med
-            st.rerun()
-medicine_query = st.text_input(
-    "🔎 Medicine name (e.g., paracetamol)",
-    placeholder="Type part of the medicine name…",
-    key="medicine_query"
-)
+         st.session_state["medicine_query"] = med
+         st.session_state["trigger_search"] = True
+         st.rerun()
+col_input, col_clear = st.columns([5, 1])
+
+with col_input:
+    medicine_query = st.text_input(
+        "🔎 Medicine name (e.g., paracetamol)",
+        placeholder="Type part of the medicine name…",
+        key="medicine_query"
+    )
+
+with col_clear:
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.button("🗑 Clear", on_click=clear_search)
+
+
 
 def render_result_card(row, medicine_name):
     stock = row["stock_qty"]
@@ -161,7 +173,8 @@ def render_result_card(row, medicine_name):
     </div>
     """, unsafe_allow_html=True)
 
-if st.button("🔍 Find"):
+if st.button("🔍 Find", key="find_button") or st.session_state.get("trigger_search"):
+    st.session_state["trigger_search"] = False
     if not medicine_query.strip():
         st.warning("Please type a medicine name first.")
     else:
