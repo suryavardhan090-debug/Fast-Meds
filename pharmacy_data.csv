@@ -1,0 +1,11 @@
+store_id,store_name,lat,lon,open_time,close_time,medicine_name,stock_qty
+1,Apollo Pharmacy,24.5854,81.2999,08:00,22:00,Paracetamol,25
+2,Apollo Pharmacy,24.5854,81.2999,08:00,22:00,Ibuprofen,10
+3,City Medicos,24.5920,81.3050,09:00,21:00,Paracetamol,0
+4,City Medicos,24.5920,81.3050,09:00,21:00,Amoxicillin,15
+5,Night Care Chemist,24.5790,81.2890,22:00,06:00,Paracetamol,30
+6,Night Care Chemist,24.5790,81.2890,22:00,06:00,Cetirizine,20
+7,Wellness Pharmacy,24.5960,81.3100,08:30,20:30,Salbutamol,8
+8,Wellness Pharmacy,24.5960,81.3100,08:30,20:30,Ibuprofen,12
+9,MedPlus,24.5700,81.2950,00:00,23:59,Paracetamol,40
+10,MedPlus,24.5700,81.2950,00:00,23:59,Amoxicillin,5
