@@ -131,7 +131,7 @@ if recent_queries:
         if cols[i].button(q, key=f"recent_{i}"):
             st.session_state["medicine_query"] = q
             st.rerun()
-            COMMON_MEDS = ["Paracetamol", "Ibuprofen", "Salbutamol", "Amoxicillin", "Cetirizine"]
+COMMON_MEDS = ["Paracetamol", "Ibuprofen", "Salbutamol", "Amoxicillin", "Cetirizine"]
 if not recent_queries:
     st.caption("💊 Commonly searched:")
     cols = st.columns(len(COMMON_MEDS))
